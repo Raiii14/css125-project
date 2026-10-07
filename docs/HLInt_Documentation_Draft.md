@@ -1,8 +1,22 @@
-# CSS125L Project Documentation: HLInt.py
+<!--
+How to use this draft: each "###" heading below is one row of the CSS125
+Project Template, in the same order and with the same label. Paste the text
+under each heading into the "Details" cell of that row, then export to PDF.
+-->
 
-**Group name:** [GROUP NAME]
+# Mapúa University
 
-**Group members:**
+## School of Information Technology
+
+### CSS125L Project Documentation: HLInt.py
+
+## Groupings
+
+### Group Name
+
+[GROUP NAME]
+
+### Group Members (including section of each student)
 
 | Full name | Section |
 | :--- | :--- |
@@ -12,27 +26,30 @@
 
 ## I. Introduction
 
-### a. Description of the program
+### a. Description of the Program
 
-HLInt.py is a simple interpreter, written in Python, for the hypothetical language HL. You run it from the `hlint` folder with the name of an HL source file:
+HLInt.py is a simple interpreter for the hypothetical language HL, written in Python. To run it, open a terminal in the folder that contains `HLInt.py` and give the name of an HL source file:
 
 ```text
-cd hlint
 py HLInt.py PROG1.HL
 ```
 
-The output files are written to the folder you run it from.
+HLInt writes its output files to the folder it runs from. For each source file, it does four things in order:
 
-The interpreter does four things in order:
+1. It removes all spaces from the source and writes the result to `NOSPACES.TXT`. It keeps line breaks and the spaces inside string literals.
+2. It writes the reserved words and symbols found in the program to `RES_SYM.TXT`. It lists each one once, in the order it first appears.
+3. It checks the program for errors. At the first error, it prints `ERROR`, then the line number and the reason, and it stops.
+4. If there are no errors, it prints `NO ERROR(S) FOUND`, then the program's output.
 
-1. It removes all spaces from the source and writes the result to `NOSPACES.TXT`. Line breaks are kept, and spaces inside string literals are kept.
-2. It writes the reserved words and symbols found in the program to `RES_SYM.TXT`. Each one is listed once, in the order it first appears.
-3. It checks the program for errors. If it finds one, it prints `ERROR` followed by the line number and the reason, and stops.
-4. If there are no errors, it prints `NO ERROR(S) FOUND` and then the program's output.
+HLInt reads the program in one pass. A tokenizer splits the text into words, numbers, strings, and symbols. A recursive-descent parser then checks each statement and runs it. HLInt prints the program output only when the whole program has no errors.
 
-The program is read in one pass. A tokenizer splits the text into words, numbers, strings and symbols. A recursive-descent parser then checks each statement and runs it at the same time. Program output is only printed when the whole program is free of errors.
+HL has these reserved words and symbols:
 
-## II. Constructs supported
+| Reserved words | Symbols |
+| :--- | :--- |
+| `integer`, `double`, `output`, `if` | `:` `:=` `=` `;` `<<` `+` `-` `>` `<` `==` `!=` `(` `)` `"` |
+
+## II. Constructs Supported
 
 ### a. Data types
 
@@ -54,7 +71,7 @@ Every variable must be declared before it is used. Declaring the same variable t
 
 ### c. Expressions and operations
 
-Assignment uses `:=`. A plain `=` also works, because the spec's math example (`x = 3 + 2;`) uses it:
+Assignment uses `:=`. A plain `=` also works, because the math example in the project specifications uses it:
 
 ```text
 x:= 5;
@@ -63,36 +80,20 @@ x = 3 + 2;
 y = 4 + 2.56;
 ```
 
-- Addition (`+`) and subtraction (`-`) can be chained, as in `a + b - c`. They are evaluated from left to right.
+- Addition (`+`) and subtraction (`-`) can be chained, as in `a + b - c`. HLInt evaluates them from left to right.
 - If any value in an expression is a double, the result is a double rounded to 2 decimal places.
 - A double cannot be assigned to an integer variable.
 
-One-way `if` with the relational operators `>`, `<`, `==` and `!=`:
+The one-way `if` uses the relational operators `>`, `<`, `==`, and `!=`:
 
 ```text
 if(x<5)
  output<<x;
 ```
 
-The statement after `if(...)` runs only when the condition is true. It is checked for errors even when the condition is false.
+The statement after `if(...)` runs only when the condition is true. HLInt checks it for errors even when the condition is false.
 
-### d. Input/Output statements
-
-```text
-output<<"hello";
-output<<x;
-output<<x+y;
-```
-
-`output<<` prints a string or the value of an expression. Doubles are printed with 2 decimal places. HL has no input statement. The interpreter's input is the source file named on the command line.
-
-### Reserved words and symbols
-
-| Reserved words | Symbols |
-| :--- | :--- |
-| `integer`, `double`, `output`, `if` | `:` `:=` `=` `;` `<<` `+` `-` `>` `<` `==` `!=` `(` `)` `"` |
-
-### Errors detected
+HLInt detects these errors:
 
 | Error | Example | Message |
 | :--- | :--- | :--- |
@@ -104,217 +105,35 @@ output<<x+y;
 | Missing parenthesis | `if(x<5` | `line 4: expected ')'` |
 | Invalid relational operator | `if(x<<5)` | `line 3: expected '<', '>', '==' or '!='` |
 
-## III. Screenshots of sample runs
-
-[INSERT SCREENSHOTS HERE. Suggested runs are listed below with their expected output.]
-
-### py HLInt.py PROG1.HL
-
-Source:
+### d. Input/Output statements
 
 ```text
-x: integer;
-x:= 5;
+output<<"hello";
 output<<x;
-```
-
-Screen output:
-
-```text
-NO ERROR(S) FOUND
-5
-```
-
-NOSPACES.TXT:
-
-```text
-x:integer;
-x:=5;
-output<<x;
-```
-
-RES_SYM.TXT:
-
-```text
-Reserved words:
-integer
-output
-
-Symbols:
-:
-;
-:=
-<<
-```
-
-### py HLInt.py PROG2.HL
-
-Source:
-
-```text
-x: integer;
-y: double;
-x:= 3;
-y:= 1.25;
 output<<x+y;
 ```
 
-Screen output:
+`output<<` prints a string or the value of an expression. Doubles print with 2 decimal places. HL has no input statement. The interpreter's input is the source file named on the command line.
 
-```text
-NO ERROR(S) FOUND
-4.25
-```
+## Code and References
 
-NOSPACES.TXT:
+### III. Screenshots of Sample Runs
 
-```text
-x:integer;
-y:double;
-x:=3;
-y:=1.25;
-output<<x+y;
-```
+[INSERT SCREENSHOTS HERE]
 
-RES_SYM.TXT:
+<!--
+Take one screenshot per run below. Each screenshot shows the command, the
+screen output, and the contents of NOSPACES.TXT and RES_SYM.TXT. Run each
+command in the folder that contains HLInt.py.
 
-```text
-Reserved words:
-integer
-double
-output
+1. py HLInt.py PROG1.HL                        -> NO ERROR(S) FOUND, then 5
+2. py HLInt.py PROG2.HL                        -> NO ERROR(S) FOUND, then 4.25
+3. py HLInt.py PROG3.HL                        -> NO ERROR(S) FOUND, then 3
+4. py HLInt.py tests/ERR_MISSING_SEMICOLON.HL  -> ERROR, then line 3: expected ';'
+5. py HLInt.py tests/ERR_UNDECLARED.HL         -> ERROR, then line 2: 'y' is not declared
+-->
 
-Symbols:
-:
-;
-:=
-<<
-+
-```
-
-### py HLInt.py PROG3.HL
-
-Source:
-
-```text
-x: integer;
-y: double;
-x:= 3;
-if(x<5)
- output<<x;
-```
-
-Screen output:
-
-```text
-NO ERROR(S) FOUND
-3
-```
-
-NOSPACES.TXT:
-
-```text
-x:integer;
-y:double;
-x:=3;
-if(x<5)
-output<<x;
-```
-
-RES_SYM.TXT:
-
-```text
-Reserved words:
-integer
-double
-if
-output
-
-Symbols:
-:
-;
-:=
-(
-<
-)
-<<
-```
-
-### py HLInt.py tests/ERR_MISSING_SEMICOLON.HL
-
-Source:
-
-```text
-x: integer;
-x:= 5
-output<<x;
-```
-
-Screen output:
-
-```text
-ERROR
-line 3: expected ';'
-```
-
-NOSPACES.TXT:
-
-```text
-x:integer;
-x:=5
-output<<x;
-```
-
-RES_SYM.TXT:
-
-```text
-Reserved words:
-integer
-output
-
-Symbols:
-:
-;
-:=
-<<
-```
-
-### py HLInt.py tests/ERR_UNDECLARED.HL
-
-Source:
-
-```text
-x: integer;
-y:= 5;
-```
-
-Screen output:
-
-```text
-ERROR
-line 2: 'y' is not declared
-```
-
-NOSPACES.TXT:
-
-```text
-x:integer;
-y:=5;
-```
-
-RES_SYM.TXT:
-
-```text
-Reserved words:
-integer
-
-Symbols:
-:
-;
-:=
-```
-
-## IV. Source code
+### IV. Source Code
 
 HLInt.py:
 
@@ -589,7 +408,7 @@ if __name__ == "__main__":
     sys.exit(main(sys.argv))
 ```
 
-## V. References
+### V. References
 
 1. CSS125L Project Specifications (course handout).
 2. Python Software Foundation. *Python 3 documentation: re (regular expression operations)*. https://docs.python.org/3/library/re.html
