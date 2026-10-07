@@ -1,0 +1,6 @@
+Group name: [GROUP NAME]
+
+Members:
+1. [FULL NAME 1] - [SECTION]
+2. [FULL NAME 2] - [SECTION]
+3. [FULL NAME 3] - [SECTION]
